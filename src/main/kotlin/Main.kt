@@ -5,8 +5,6 @@ import java.net.InetAddress
 import java.util.*
 
 fun main(args: Array<String>) {
-    println("SNTP Client is started")
-
     val serverName = if (args.size == 1) args[0] else return
 
     // Send request
@@ -18,7 +16,7 @@ fun main(args: Array<String>) {
     socket.send(packet)
 
     // Get response
-    println("NTP request sent, waiting for response...\n")
+    println("NTP request sent, waiting for response...")
     packet = DatagramPacket(buf, buf.size)
     socket.receive(packet)
 
@@ -27,16 +25,17 @@ fun main(args: Array<String>) {
 
     // Process response
     val msg = Message(packet.data)
-    val roundTripDelay = destinationTimestamp.time - msg.originateTimestamp.time - (msg.transmitTimestamp.time - msg.receiveTimestamp.time)
+    val roundTripDelay = (destinationTimestamp.time - msg.originateTimestamp.time) - (msg.receiveTimestamp.time - msg.transmitTimestamp.time)
     val localClockOffset = ((msg.receiveTimestamp.time - msg.originateTimestamp.time) + (msg.transmitTimestamp.time - destinationTimestamp.time)) / 2
 
     // Display response
+    println("----------------------------------------------")
     println("NTP server: $serverName")
     println(msg.toString())
     println("Destination timestamp: ${dateFormat.format(destinationTimestamp.date)}")
     println("Round-trip delay:      ${fixedPointFormat.format(roundTripDelay)} ms")
     println("Local clock offset:    ${fixedPointFormat.format(localClockOffset)}  ms")
+    println("Accurate local time:   ${dateFormat.format(Date(destinationTimestamp.date.time + localClockOffset))}")
+    println("----------------------------------------------")
     socket.close()
-
-    println("SNTP Client is finished")
 }

@@ -12,17 +12,16 @@ Simple NTP client which:
 
 ```
 > ./gradlew run --args=<ntp_server_domain>
+
+Example:
+> ./gradlew run --args=ntp1.stratum1.ru
 ```
 
 ### Windows
 
 ```
 > ./gradlew.bat run --args=<ntp_server_domain>
-```
 
-### Example
-
-```
-> ./gradlew run --args=ntp1.stratum1.ru
+Example:
 > ./gradlew.bat run --args=ntp1.stratum1.ru
 ```
